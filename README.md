@@ -11,7 +11,8 @@
 
 ### 시나리오 설계 및 코딩 시작!
 1. Django기본 이해
-   - Middleware란 무엇인가? (with Decorators)
+   - Middleware란 무엇인가? (with Decorators)  
+     요청(클라이언트)과 응답(서버)사이에서 동작하는 코드의 계층
    - Django란?
 
 2. JWT 기본 이해
