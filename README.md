@@ -1,6 +1,6 @@
 # BE_onboarding(Python)
 백엔드 개발 온보딩 과제
-SA문서: https://www.notion.so/onboarding-dffcee0fdfcf4e398cd51d3ef2db7705
+SA문서: https://thoughtful-calculator-097.notion.site/onboarding-dffcee0fdfcf4e398cd51d3ef2db7705
 
 ## Requirements
 - [ ] Pytest를 이용한 테스트 코드 작성법 이해

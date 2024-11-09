@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 username_validator = RegexValidator(
     regex=r"^[a-zA-Z0-9@./+\-_ ]+$",
     message=_(
-        "사용자 이름에는 알파벳 대소문자, 한글, 공백 및 특수문자(@, ., /, +, -, _)만 포함 가능합니다."
+        "사용자 이름에는 알파벳 대소문자, 공백 및 특수문자(@, ., /, +, -, _)만 포함 가능합니다."
     ),
 )
 
