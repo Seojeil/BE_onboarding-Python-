@@ -3,15 +3,15 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer
+from .serializers import SignUpSerializer
 
 
 User = get_user_model()
 
 
-class RegisterAPIView(APIView):
+class SignUpAPIView(APIView):
     def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
+        serializer = SignUpSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -20,7 +20,7 @@ class RegisterAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SignInAPIView(APIView):
+class logInAPIView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
