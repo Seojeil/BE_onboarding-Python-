@@ -9,7 +9,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "password", "nickname", "role"]
         extra_kwargs = {
-            'password': {'write_only': True},
+            "password": {"write_only": True},
         }
 
     def create(self, validated_data):
@@ -27,3 +27,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation["role"] = instance.get_role_display()
         return representation
+
+    # 닉네임 검증
+    def validate_nickname(self, value):
+        # 길이 검증
+        if len(value) < 2 or len(value) > 20:
+            raise serializers.ValidationError(
+                "닉네임은 최소 2글자 이상, 최대 20글자 이하이어야 합니다."
+            )
+
+        return value
+
+    # 비밀번호 검증
+    def validate_password(self, value):
+        # 길이 검증
+        if len(value) < 8:
+            raise serializers.ValidationError("비밀번호는 최소 8자 이상이어야 합니다.")
+
+        return value
