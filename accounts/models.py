@@ -3,32 +3,25 @@ from django.contrib.auth.models import AbstractUser, UserManager
 
 
 class CustomUserManager(UserManager):
-    def create_superuser(self, nickname, password=None, **extra_fields):
-        extra_fields.setdefault('roles', 'A')
+    def create_superuser(self, username, password=None, **extra_fields):
+        extra_fields.setdefault('role', 'A')
 
-        return self._create_user(nickname, None, password, **extra_fields)
+        return self._create_user(username, None, password, **extra_fields)
 
 
-class Role(models.Model):
+class User(AbstractUser):
     ROLE_CHOICES = [
         ("A", "ADMIN"),
         ("S", "STAFF"),
         ("U", "USER"),
     ]
 
-    name = models.CharField(
-        max_length=50, choices=ROLE_CHOICES, default="U", unique=True
-    )
-
-    def __str__(self):
-        return self.name
-
-
-class User(AbstractUser):
     nickname = models.CharField(max_length=20, unique=True)
-    roles = models.ManyToManyField(Role, related_name="users", blank=True)
+    role = models.CharField(choices=ROLE_CHOICES, max_length=1, default="U")
 
     REQUIRED_FIELDS = ["nickname"]
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.username
