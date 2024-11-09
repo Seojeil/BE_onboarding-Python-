@@ -12,7 +12,7 @@ class CustomUserManager(UserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("Superuser must have is_superuser=True.")
 
-        extra_fields.setdefault('role', 'A')
+        extra_fields.setdefault("role", "A")
 
         return self._create_user(username, None, password, **extra_fields)
 
