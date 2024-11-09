@@ -1,5 +1,15 @@
-from django.db import models
+from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+# 커스텀 유효성 검사 정의
+username_validator = RegexValidator(
+    regex=r"^[a-zA-Z0-9@./+\-_ ]+$",  # 알파벳, 숫자, 한글, 공백, 특수문자 허용
+    message=_(
+        "사용자 이름에는 알파벳 대소문자, 한글, 공백 및 특수문자(@, ., /, +, -, _)만 포함 가능합니다."
+    ),
+)
 
 
 class CustomUserManager(UserManager):
@@ -26,6 +36,19 @@ class User(AbstractUser):
 
     nickname = models.CharField(max_length=20, unique=True)
     role = models.CharField(choices=ROLE_CHOICES, max_length=1, default="U")
+
+    username = models.CharField(
+        _("username"),
+        max_length=150,
+        unique=True,
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
+        validators=[username_validator],  # 커스텀 유효성 검사자 사용
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
+    )
 
     REQUIRED_FIELDS = ["nickname"]
 
