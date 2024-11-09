@@ -35,11 +35,13 @@ class SignInAPIView(APIView):
             )
 
         # 토큰 발급
-        token = RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
 
         return Response(
             {
-                "token": str(token),
+                "access": access_token,
+                "refresh": str(refresh),
             },
             status=status.HTTP_200_OK,
         )
