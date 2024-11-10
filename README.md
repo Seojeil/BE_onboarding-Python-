@@ -1,14 +1,20 @@
 # BE_onboarding(Python)
-백엔드 개발 온보딩 과제
-SA문서: https://thoughtful-calculator-097.notion.site/onboarding-dffcee0fdfcf4e398cd51d3ef2db7705
+### 백엔드 개발 온보딩 과제
+- SA문서  
+https://thoughtful-calculator-097.notion.site/onboarding-dffcee0fdfcf4e398cd51d3ef2db7705
+- 과제 url  
+http://3.34.40.146/
+- admin 계정  
+아이디: admin  
+비밀번호: 1q2w3e4r
 
 ## Requirements
-- [ ] Pytest를 이용한 테스트 코드 작성법 이해
+- [x] Pytest를 이용한 테스트 코드 작성법 이해
 - [x] Django를 이용한 인증과 권한 이해
 - [x] JWT와 구체적인 알고리즘의 이해
 - [x] PR 날려보기
-- [ ] 리뷰 바탕으로 개선하기
-- [ ] EC2에 배포해보기
+- [x] 리뷰 바탕으로 개선하기
+- [x] EC2에 배포해보기
 
 ### 시나리오 설계 및 코딩 시작!
 1. Django기본 이해
