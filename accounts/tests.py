@@ -1,7 +1,7 @@
-from rest_framework.test import APITestCase
 from rest_framework import status
-from django.contrib.auth import get_user_model
+from rest_framework.test import APITestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 class UserAuthenticationTests(APITestCase):
@@ -12,59 +12,61 @@ class UserAuthenticationTests(APITestCase):
         self.user_data = {
             "username": "testuser",
             "password": "password123",
-            "email": "testuser@example.com",
+            "nickname": "testnickname",
         }
         self.user = get_user_model().objects.create_user(
             username=self.user_data["username"],
             password=self.user_data["password"],
-            email=self.user_data["email"],
+            nickname=self.user_data["nickname"],
         )
-        self.signup_url = reverse("signup")  # 회원가입 URL
-        self.login_url = reverse("login")  # 로그인 URL
+        self.signup_url = reverse("signup")
+        self.login_url = reverse("login")
 
     def test_signup_success(self):
         """
-        회원가입 테스트: 정상적인 데이터를 입력하면 회원가입이 성공해야 한다.
+        회원가입 테스트: 정상적인 데이터를 입력하면 회원가입이 성공해야 하고, role은 기본값 'U'여야 한다.
         """
         data = {
             "username": "newuser",
             "password": "password123",
-            "email": "newuser@example.com",
+            "nickname": "newnickname",
         }
         response = self.client.post(self.signup_url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("username", response.data)
-        self.assertIn("email", response.data)
+        self.assertIn("nickname", response.data)
+        self.assertEqual(response.data["role"], "USER")
 
-    def test_signup_duplicate_email(self):
+    def test_signup_invalid_nickname_length(self):
         """
-        이메일 중복 시 회원가입이 실패해야 한다.
+        닉네임이 20글자를 초과할 경우 회원가입 시 실패해야 한다.
         """
         data = {
-            "username": "newuser",
+            "username": "validuser",
             "password": "password123",
-            "email": self.user_data["email"],  # 기존에 존재하는 이메일
+            "nickname": "a" * 21,
         }
         response = self.client.post(self.signup_url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("email", response.data)
+        self.assertIn("nickname", response.data)
+        self.assertIn("이 필드의 글자 수가 20 이하인지 확인하십시오.", response.data["nickname"])
 
-    def test_signup_invalid_data(self):
+    def test_signup_invalid_password_length(self):
         """
-        잘못된 데이터로 회원가입 시 실패해야 한다.
+        비밀번호가 8글자 미만일 경우 회원가입 시 실패해야 한다.
         """
         data = {
-            "username": "",  # 비어있는 사용자명
-            "password": "password123",
-            "email": "invalidemail",
+            "username": "validuser",
+            "password": "short",
+            "nickname": "validnickname",
         }
         response = self.client.post(self.signup_url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("username", response.data)
-        self.assertIn("email", response.data)
+        self.assertIn("password", response.data)
+        self.assertIn("비밀번호는 최소 8자 이상이어야 합니다.", response.data["password"])
 
     def test_login_success(self):
         """
@@ -77,8 +79,8 @@ class UserAuthenticationTests(APITestCase):
         response = self.client.post(self.login_url, data, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("access", response.data)  # access token 존재 확인
-        self.assertIn("refresh", response.data)  # refresh token 존재 확인
+        self.assertIn("access", response.data)
+        self.assertIn("refresh", response.data)
 
     def test_login_invalid_credentials(self):
         """
@@ -86,7 +88,7 @@ class UserAuthenticationTests(APITestCase):
         """
         data = {
             "username": self.user_data["username"],
-            "password": "wrongpassword",  # 잘못된 비밀번호
+            "password": "wrongpassword",
         }
         response = self.client.post(self.login_url, data, format="json")
 
@@ -96,7 +98,7 @@ class UserAuthenticationTests(APITestCase):
 
     def test_login_empty_fields(self):
         """
-        로그인 시 이메일이나 비밀번호가 비어있으면 실패해야 한다.
+        로그인 시 사용자명이나 비밀번호가 비어있으면 실패해야 한다.
         """
         data = {
             "username": "",
@@ -104,6 +106,4 @@ class UserAuthenticationTests(APITestCase):
         }
         response = self.client.post(self.login_url, data, format="json")
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("username", response.data)
-        self.assertIn("password", response.data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
