@@ -30,3 +30,8 @@ Thumbs.db   # Windows
 *.bak
 *.swm
 *.swo
+
+# pytest
+.pytest_cache/
+*.pytest_cache/
+.cache/
