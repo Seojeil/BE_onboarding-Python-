@@ -1,6 +1,9 @@
 # Custom
 .env
 
+# venv
+.venv/
+
 # Python
 *.pyc
 *.pyo
