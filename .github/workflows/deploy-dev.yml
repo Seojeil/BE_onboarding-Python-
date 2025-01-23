@@ -33,7 +33,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
           cd /home/ec2-user/BE_onboarding-Python-
           git pull origin dev
-          source .venv/bin/activate
+          pyenv activate myenv
           pip install -r requirements.txt
           python manage.py migrate
           sudo systemctl restart gunicorn
