@@ -1,6 +1,10 @@
 # Custom
 .env
 
+# venv
+.venv/
+.python-version/
+
 # Python
 *.pyc
 *.pyo
