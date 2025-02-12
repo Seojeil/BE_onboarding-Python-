@@ -39,3 +39,6 @@ Thumbs.db   # Windows
 .pytest_cache/
 *.pytest_cache/
 .cache/
+
+# server
+/etc/systemd/system/gunicorn.service
