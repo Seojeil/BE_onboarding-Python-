@@ -1,26 +1,35 @@
-version: "3.8"
+version: '3.8'
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  django:
+    build: .
     container_name: django_app
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: mydatabase
+      DATABASE_USER: myuser
+      DATABASE_PASSWORD: mypassword
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-    depends_on:
-      - db
-    environment:
-      - DEBUG=True
 
-  db:
-    image: postgres:15
-    container_name: postgres_db
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: django_user
-      POSTGRES_PASSWORD: django_password
-      POSTGRES_DB: django_db
+volumes:
+  postgres_data:
