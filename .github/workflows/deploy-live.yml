@@ -43,7 +43,7 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}
         run: |
-          echo "$PRIVATE_KEY" > private_key.pem
+          echo "$PRIVATE_KEY" > private_key.pem | sed 's/\\n/\n/g' > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem $EC2_USER@$EC2_HOST << 'EOF'
           cd /home/ec2-user/BE_onboarding-Python-
