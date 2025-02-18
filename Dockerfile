@@ -24,5 +24,5 @@ COPY . .
 # Django 서버 실행 포트 설정
 EXPOSE 8000
 
-# 명령어 설정
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# 환경 변수에 따라 다른 커맨드 실행
+CMD ["sh", "-c", "if [ '$DJANGO_ENV' = 'production' ]; then gunicorn myproject.wsgi:application --bind 0.0.0.0:8000; else python manage.py runserver 0.0.0.0:8000; fi"]
